@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Shop</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #111;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 10px;
+        }
+
+        .product {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .product h2 {
+            font-size: 1.2em;
+            margin: 10px 0 5px;
+        }
+
+        .product p {
+            margin: 5px 0;
+        }
+
+        .product button {
+            background-color: #111;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .product button:hover {
+            background-color: #333;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .contact-form h2 {
+            margin-top: 0;
+        }
+
+        .contact-form input,
+        .contact-form textarea,
+        .contact-form button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        .contact-form button {
+            background-color: #111;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .contact-form button:hover {
+            background-color: #333;
+        }
+
+        .contact-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .contact-buttons button {
+            margin: 5px;
+            background-color: #1DA1F2;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .contact-buttons button:hover {
+            background-color: #0d8ddb;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Minimal Shop</h1>
+    </header>
+
+    <section class="products">
+        <div class="product">
+            <img src="https://via.placeholder.com/250x250.png?text=สินค้า+1" alt="สินค้า 1">
+            <h2>สินค้า 1</h2>
+            <p>ราคา: 590 บาท</p>
+            <button onclick="addToCart('สินค้า 1', 590)">เพิ่มลงตะกร้า</button>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/250x250.png?text=สินค้า+2" alt="สินค้า 2">
+            <h2>สินค้า 2</h2>
+            <p>ราคา: 850 บาท</p>
+            <button onclick="addToCart('สินค้า 2', 850)">เพิ่มลงตะกร้า</button>
+        </div>
+        <div class="product">
+            <img src="https://via.placeholder.com/250x250.png?text=สินค้า+3" alt="สินค้า 3">
+            <h2>สินค้า 3</h2>
+            <p>ราคา: 1,200 บาท</p>
+            <button onclick="addToCart('สินค้า 3', 1200)">เพิ่มลงตะกร้า</button>
+        </div>
+    </section>
+
+    <section class="contact-form">
+        <h2>ติดต่อ / สั่งซื้อ</h2>
+        <!-- เปลี่ยน yourFormID เป็น ID ของ Formspree -->
+        <form action="https://formspree.io/f/mldodozq" method="POST">
+            <input type="text" name="name" placeholder="ชื่อ-นามสกุล" required>
+            <input type="email" name="email" placeholder="อีเมล" required>
+            <input type="text" name="product" id="productInput" placeholder="สินค้าที่ต้องการ" required>
+            <textarea name="message" placeholder="ข้อความเพิ่มเติม" rows="4"></textarea>
+            <button type="submit">ส่งข้อมูล</button>
+        </form>
+        <p id="formMessage" style="color: green; text-align:center;"></p>
+
+        <div class="contact-buttons">
+            <a href="https://line.me/R/ti/p/yourLineID" target="_blank">
+                <button>ติดต่อผ่าน Line</button>
+            </a>
+            <a href="https://wa.me/1234567890" target="_blank">
+                <button>ติดต่อผ่าน WhatsApp</button>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2025 Minimal Shop
+    </footer>
+
+    <script>
+        let cart = [];
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            alert(`เพิ่ม ${name} แล้ว\nรวมทั้งหมด: ${total} บาท`);
+            document.getElementById('productInput').value = cart.map(item => item.name).join(', ');
+        }
+
+        const form = document.getElementById('orderForm');
+        const formMessage = document.getElementById('formMessage');
+
+        form.addEventListener('submit', function(e) {
+            // ไม่ preventDefault เพื่อให้ส่งไป Formspree จริง
+            formMessage.textContent = "ขอบคุณ! เราได้รับข้อมูลของคุณแล้ว 🎉";
+        });
+    </script>
+</body>
+</html>
